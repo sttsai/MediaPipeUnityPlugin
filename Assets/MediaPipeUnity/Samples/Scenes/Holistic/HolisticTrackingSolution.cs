@@ -6,6 +6,7 @@
 
 using System.Collections;
 using UnityEngine;
+using XR.BodyTracking;
 
 namespace Mediapipe.Unity.Sample.Holistic
 {
@@ -17,6 +18,7 @@ namespace Mediapipe.Unity.Sample.Holistic
     [SerializeField] private PoseWorldLandmarkListAnnotationController _poseWorldLandmarksAnnotationController;
     [SerializeField] private MaskAnnotationController _segmentationMaskAnnotationController;
     [SerializeField] private NormalizedRectAnnotationController _poseRoiAnnotationController;
+    private CalFPS _calFPS = new CalFPS();
 
     public HolisticTrackingGraph.ModelComplexity modelComplexity
     {
@@ -130,26 +132,38 @@ namespace Mediapipe.Unity.Sample.Holistic
     private void OnFaceLandmarksOutput(object stream, OutputEventArgs<NormalizedLandmarkList> eventArgs)
     {
       _holisticAnnotationController.DrawFaceLandmarkListLater(eventArgs.value);
+      if (eventArgs.value != null)
+        _calFPS.UpdateFaceTimer();
     }
 
     private void OnPoseLandmarksOutput(object stream, OutputEventArgs<NormalizedLandmarkList> eventArgs)
     {
       _holisticAnnotationController.DrawPoseLandmarkListLater(eventArgs.value);
+
+      if (eventArgs.value != null)
+        _calFPS.UpdatePoseTimer();
     }
 
     private void OnLeftHandLandmarksOutput(object stream, OutputEventArgs<NormalizedLandmarkList> eventArgs)
     {
       _holisticAnnotationController.DrawLeftHandLandmarkListLater(eventArgs.value);
+      if (eventArgs.value != null)
+        _calFPS.UpdateLeftHandTimer();
     }
 
     private void OnRightHandLandmarksOutput(object stream, OutputEventArgs<NormalizedLandmarkList> eventArgs)
     {
       _holisticAnnotationController.DrawRightHandLandmarkListLater(eventArgs.value);
+      if (eventArgs.value != null)
+        _calFPS.UpdateRightHandTimer();
     }
 
     private void OnPoseWorldLandmarksOutput(object stream, OutputEventArgs<LandmarkList> eventArgs)
     {
       _poseWorldLandmarksAnnotationController.DrawLater(eventArgs.value);
+
+      if(eventArgs.value!=null)
+        _calFPS.UpdatePoseWorldTimer();
     }
 
     private void OnSegmentationMaskOutput(object stream, OutputEventArgs<ImageFrame> eventArgs)
@@ -161,5 +175,29 @@ namespace Mediapipe.Unity.Sample.Holistic
     {
       _poseRoiAnnotationController.DrawLater(eventArgs.value);
     }
+
+    void OnGUI()
+    {
+      GUIStyle style = new GUIStyle();
+      style.fontSize = 24;
+
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+            style.fontSize = 48;
+#endif
+
+      _calFPS.UpdateRenderTimer();
+
+      string msg = _calFPS.GetFPSInfo();
+      GUI.Label(new UnityEngine.Rect(10, 50, 200, 50), msg, style);
+
+      var source = ImageSourceProvider.ImageSource;
+      if (source!=null)
+      {
+        msg = $"Source Resolution: {source.resolution}";
+        GUI.Label(new UnityEngine.Rect(10, 150, 200, 50), msg, style);
+      }
+
+    }
+
   }
 }
