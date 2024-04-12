@@ -31,7 +31,7 @@ namespace XR.BodyTracking
 
         public string GetFPSInfo()
         {
-          return string.Format("FPS:{0:000.} P:{1:00.} PW:{2:00.} LH:{3:00.} RH:{4:00.}", renderFps.fps, poseFps.fps, poseWorldFps.fps, leftHandFps.fps, rightHandFps.fps);
+          return string.Format("FPS:{0:000.} P:{1:00.} PW:{2:00.} LH:{3:00.} RH:{4:00.} F:{5:00.}", renderFps.fps, poseFps.fps, poseWorldFps.fps, leftHandFps.fps, rightHandFps.fps, faceFps.fps);
         }
 
         public static void UpdateFPS(ref DeltaTime target)

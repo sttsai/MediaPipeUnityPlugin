@@ -754,6 +754,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: HolisticLandmarks Annotation
       objectReference: {fileID: 0}
+    - target: {fileID: 4430298588621950843, guid: cf645f1af5f90246e87c443ab2154263,
+        type: 3}
+      propertyPath: _lineWidth
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7911686807350250789, guid: cf645f1af5f90246e87c443ab2154263,
+        type: 3}
+      propertyPath: _radius
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
